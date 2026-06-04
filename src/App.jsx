@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Phone, MessageCircle, Mic, PhoneOff, ArrowRight, CheckCircle2, Loader2, Calendar, Globe, Zap, Clock } from 'lucide-react';
+import { Phone, MessageCircle, Mic, PhoneOff, ArrowRight, CheckCircle2, Loader2, Calendar, Globe, Zap, Clock, Lock } from 'lucide-react';
 import { RetellWebClient } from 'retell-client-js-sdk';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import './App.css';
@@ -15,6 +15,8 @@ function App() {
     { sender: 'bot', text: '¡Hola! Soy Talkora. ¿En qué te puedo ayudar hoy?' }
   ]);
   const [chatInput, setChatInput] = useState('');
+  const [passcode, setPasscode] = useState('');
+  const [isPasscodeValid, setIsPasscodeValid] = useState(false);
   const retellWebClientRef = useRef(null);
   const callTimeoutRef = useRef(null);
 
@@ -88,6 +90,16 @@ function App() {
   };
 
   const toggleCall = async () => {
+    if (!isPasscodeValid && !isCalling) {
+      if (passcode.trim().toUpperCase() === 'BEATRIZ2026') {
+        setIsPasscodeValid(true);
+        setErrorText("");
+      } else {
+        setErrorText("Código incorrecto. Pide el código de prueba a BeatrizAutomatiza para probarlo.");
+        return;
+      }
+    }
+
     if (isCalling) {
       retellWebClientRef.current.stopCall();
       if (callTimeoutRef.current) clearTimeout(callTimeoutRef.current);
@@ -229,15 +241,31 @@ function App() {
                     className={`pg-avatar-btn ${isCalling ? 'active' : ''} ${isLoading ? 'loading' : ''}`}
                     onClick={toggleCall}
                     disabled={isLoading}
-                    title={isCalling ? "Finalizar llamada" : "Iniciar llamada"}
+                    title={isCalling ? "Finalizar llamada" : (isPasscodeValid ? "Iniciar llamada" : "Desbloquear")}
                   >
-                    {isLoading ? <Loader2 className="animate-spin" size={40} /> : (isCalling ? <PhoneOff size={40} /> : <Mic size={40} />)}
+                    {isLoading ? <Loader2 className="animate-spin" size={40} /> : (isCalling ? <PhoneOff size={40} /> : (isPasscodeValid ? <Mic size={40} /> : <Lock size={40} />))}
                   </button>
                   <h3 className="pg-status-title">Agente IA Activo</h3>
                   <p className="pg-status-subtitle">
-                    {isCalling ? "Conectado · Tiempo real" : "Pulsa para iniciar"}
+                    {isCalling ? "Conectado · Tiempo real" : (isPasscodeValid ? "Desbloqueado · Pulsa para iniciar" : "Bloqueado por seguridad")}
                   </p>
                   
+                  {!isPasscodeValid && (
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '300px', marginBottom: '1.5rem' }}>
+                      <input 
+                        type="text" 
+                        value={passcode}
+                        onChange={(e) => setPasscode(e.target.value)}
+                        placeholder="Introduce el código..." 
+                        className="pg-chat-input"
+                        style={{ textAlign: 'center', marginBottom: '0.5rem', width: '100%' }}
+                      />
+                      <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem', textAlign: 'center', lineHeight: '1.4' }}>
+                        Pide el código de prueba a BeatrizAutomatiza para probarlo.
+                      </p>
+                    </div>
+                  )}
+
                   <div className={`pg-waveform ${isCalling ? 'active' : ''}`}>
                     {[...Array(40)].map((_, i) => <div key={i} className="pg-bar"></div>)}
                   </div>
