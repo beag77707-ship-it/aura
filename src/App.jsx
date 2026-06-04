@@ -11,6 +11,10 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [activeTab, setActiveTab] = useState('voice');
+  const [chatMessages, setChatMessages] = useState([
+    { sender: 'bot', text: '¡Hola! Soy Talkora. ¿En qué te puedo ayudar hoy?' }
+  ]);
+  const [chatInput, setChatInput] = useState('');
   const retellWebClientRef = useRef(null);
 
   const { scrollY } = useScroll();
@@ -46,10 +50,21 @@ function App() {
     };
   }, []);
 
-  const handleWhatsAppRedirect = () => {
-    const phoneNumber = "34600000000"; 
-    const message = "Hola Talkora, me gustaría obtener más información.";
-    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (!chatInput.trim()) return;
+    
+    const userMsg = { sender: 'user', text: chatInput };
+    setChatMessages((prev) => [...prev, userMsg]);
+    setChatInput('');
+
+    // Simulate bot typing and responding
+    setTimeout(() => {
+      setChatMessages((prev) => [
+        ...prev,
+        { sender: 'bot', text: 'Esta es una respuesta simulada de Talkora. En la versión final, aquí se integrará la API de WhatsApp real.' }
+      ]);
+    }, 1500);
   };
 
   const toggleCall = async () => {
@@ -188,7 +203,14 @@ function App() {
             <div className="pg-card-inner">
               {activeTab === 'voice' ? (
                 <div className="pg-voice-mode">
-                  <div className="pg-avatar"><Mic size={40}/></div>
+                  <button 
+                    className={`pg-avatar-btn ${isCalling ? 'active' : ''} ${isLoading ? 'loading' : ''}`}
+                    onClick={toggleCall}
+                    disabled={isLoading}
+                    title={isCalling ? "Finalizar llamada" : "Iniciar llamada"}
+                  >
+                    {isLoading ? <Loader2 className="animate-spin" size={40} /> : (isCalling ? <PhoneOff size={40} /> : <Mic size={40} />)}
+                  </button>
                   <h3 className="pg-status-title">Agente IA Activo</h3>
                   <p className="pg-status-subtitle">
                     {isCalling ? "Conectado · Tiempo real" : "Pulsa para iniciar"}
@@ -197,35 +219,32 @@ function App() {
                   <div className={`pg-waveform ${isCalling ? 'active' : ''}`}>
                     {[...Array(40)].map((_, i) => <div key={i} className="pg-bar"></div>)}
                   </div>
-                  
-                  <div className="pg-transcript">
-                    <span className="text-primary-gradient" style={{fontWeight: 700}}>IA:</span> "¡Hola! Soy Talkora. He comprobado tu reserva para el apartamento y todo está listo."
-                  </div>
-                  
-                  <div className="pg-controls">
-                    <button 
-                      className={`pg-call-btn ${isCalling ? 'hangup' : ''}`}
-                      onClick={toggleCall}
-                      disabled={isLoading}
-                    >
-                      {isLoading ? <Loader2 className="animate-spin" size={24} /> : (isCalling ? <PhoneOff size={24} /> : <Phone size={24} />)}
-                    </button>
-                    {errorText && <p style={{color: '#EF4444', fontSize: '0.9rem', marginTop: '1rem'}}>{errorText}</p>}
-                  </div>
+
+                  {errorText && <p style={{color: '#EF4444', fontSize: '0.9rem', marginTop: '1rem'}}>{errorText}</p>}
                 </div>
               ) : (
                 <div className="pg-whatsapp-mode">
                   <div className="pg-chat-container">
-                    <div className="pg-chat-user">
-                      Necesito reservar un apartamento del miércoles 4 de julio al domingo 7 de julio.
+                    <div className="pg-chat-messages">
+                      {chatMessages.map((msg, idx) => (
+                        <div key={idx} className={`pg-chat-bubble ${msg.sender}`}>
+                          {msg.text}
+                        </div>
+                      ))}
                     </div>
-                    <div className="pg-chat-bot">
-                      ¡Hola! Por supuesto. He comprobado nuestra disponibilidad y tenemos un apartamento premium libre para esas fechas. El total es de 350€. ¿Cuándo prefieres realizar el pago?
-                    </div>
+                    <form className="pg-chat-input-area" onSubmit={handleSendMessage}>
+                      <input 
+                        type="text" 
+                        value={chatInput}
+                        onChange={(e) => setChatInput(e.target.value)}
+                        placeholder="Escribe un mensaje de prueba..." 
+                        className="pg-chat-input"
+                      />
+                      <button type="submit" className="pg-chat-send" disabled={!chatInput.trim()}>
+                        <ArrowRight size={20} />
+                      </button>
+                    </form>
                   </div>
-                  <button className="pg-wa-btn" onClick={handleWhatsAppRedirect}>
-                    <MessageCircle size={20} /> Probar en WhatsApp Real
-                  </button>
                 </div>
               )}
             </div>
