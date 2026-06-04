@@ -91,7 +91,7 @@ function App() {
 
   const toggleCall = async () => {
     if (!isPasscodeValid && !isCalling) {
-      if (passcode.trim().toUpperCase() === 'BEATRIZ2026') {
+      if (passcode.trim().toUpperCase() === 'LIMITE85') {
         setIsPasscodeValid(true);
         setErrorText("");
       } else {
