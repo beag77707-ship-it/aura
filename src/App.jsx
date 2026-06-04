@@ -16,6 +16,7 @@ function App() {
   ]);
   const [chatInput, setChatInput] = useState('');
   const retellWebClientRef = useRef(null);
+  const callTimeoutRef = useRef(null);
 
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 1000], [0, 200]);
@@ -32,9 +33,10 @@ function App() {
       setErrorText("");
     });
 
-    retellClient.on("call_ended", () => {
+    retellClient.on('call_ended', () => {
       setIsCalling(false);
       setIsLoading(false);
+      if (callTimeoutRef.current) clearTimeout(callTimeoutRef.current);
     });
 
     retellClient.on("error", (error) => {
@@ -86,35 +88,40 @@ function App() {
   };
 
   const toggleCall = async () => {
-    if (isCalling || isLoading) {
-      retellWebClientRef.current?.stopCall();
-      return;
-    }
+    if (isCalling) {
+      retellWebClientRef.current.stopCall();
+      if (callTimeoutRef.current) clearTimeout(callTimeoutRef.current);
+    } else {
+      setIsLoading(true);
+      setErrorText("");
 
-    setIsLoading(true);
-    setErrorText("");
+      try {
+        const response = await fetch('/api/create-web-call', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ agent_id: agentId })
+        });
 
-    try {
-      const response = await fetch('/api/create-web-call', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ agent_id: agentId })
-      });
+        const data = await response.json();
 
-      const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || "Error creando llamada");
+        }
 
-      if (!response.ok) {
-        throw new Error(data.error || "Error creando llamada");
+        await retellWebClientRef.current.startCall({ accessToken: data.access_token });
+        
+        // Safety timeout to prevent credit drain (45 seconds)
+        callTimeoutRef.current = setTimeout(() => {
+          if (retellWebClientRef.current) {
+            retellWebClientRef.current.stopCall();
+            setErrorText("Tiempo de demostración agotado (límite 45s).");
+          }
+        }, 45000);
+      } catch (err) {
+        console.error("Error al iniciar llamada:", err);
+        setErrorText("Falta la API Key en el servidor o hay un error.");
+        setIsLoading(false);
       }
-
-      await retellWebClientRef.current?.startCall({
-        accessToken: data.access_token,
-      });
-
-    } catch (err) {
-      console.error("Error al iniciar llamada:", err);
-      setErrorText("Falta la API Key en el servidor o hay un error.");
-      setIsLoading(false);
     }
   };
 
@@ -263,6 +270,21 @@ function App() {
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Calendar Button */}
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '3rem' }}>
+            <motion.a 
+              href="https://calendar.google.com/calendar/u/0?cid=MmNhYzMzYmI0MDgwZDI4YzY2NzdkNzE5NWVlMmE2MGFhZmY5MDIxZjAyYzJmZGUwODEwZjhhOTIwNzIxZGJlZUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-calendar"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Calendar size={20} />
+              Agendar Llamada
+            </motion.a>
           </div>
         </motion.div>
       </section>
