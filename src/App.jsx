@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Phone, MessageCircle, Mic, PhoneOff, ArrowRight, CheckCircle2, Loader2, Instagram, Calendar, Globe, Zap, Clock } from 'lucide-react';
+import { Phone, MessageCircle, Mic, PhoneOff, ArrowRight, CheckCircle2, Loader2, Calendar, Globe, Zap, Clock } from 'lucide-react';
 import { RetellWebClient } from 'retell-client-js-sdk';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import './App.css';
@@ -321,7 +321,7 @@ function App() {
               Con Talkora, he diseñado agentes capaces de gestionar el 90% de la comunicación con tus huéspedes de forma natural, humana y eficiente. Deja de trabajar para tu negocio y haz que la IA trabaje para ti.
             </p>
             <a href="https://www.instagram.com/beatrizautomatiza/" target="_blank" rel="noopener noreferrer" className="btn-instagram">
-              <Instagram size={20} /> Sígueme en Instagram
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> Sígueme en Instagram
             </a>
           </motion.div>
         </div>
