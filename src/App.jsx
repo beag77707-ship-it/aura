@@ -191,9 +191,6 @@ function App() {
           <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>
             {isLoading ? 'Conectando con servidor...' : (isCalling ? 'Talkora te está escuchando...' : 'Pulsa para hablar')}
           </h3>
-          <p style={{ color: 'var(--color-text-muted)' }}>
-            Agent ID: {agentId}
-          </p>
           {errorText && (
             <p style={{ color: '#EF4444', marginTop: '1rem', fontWeight: 500 }}>
               {errorText}
