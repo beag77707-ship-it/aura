@@ -21,6 +21,13 @@ function App() {
 
   return (
     <div className="app-container">
+      {/* Aura Animated Background */}
+      <div className="aura-background">
+        <div className="aura-blob aura-blob-1"></div>
+        <div className="aura-blob aura-blob-2"></div>
+        <div className="aura-blob aura-blob-3"></div>
+      </div>
+
       {/* Navbar */}
       <nav className="navbar">
         <div className="nav-logo">
