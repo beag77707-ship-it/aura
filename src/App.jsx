@@ -123,7 +123,7 @@ function App() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <img src="/logo-talkora.png" alt="Talkora Logo" className="logo-image" />
+          <img src="/logo.png" alt="Talkora Logo" className="logo-image" />
           <span>Talkora</span>
         </motion.div>
         <motion.button 
@@ -371,7 +371,7 @@ function App() {
       {/* Footer */}
       <footer className="footer">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-          <img src="/logo-talkora.png" alt="Talkora Logo" className="logo-image" style={{ height: '28px' }} />
+          <img src="/logo.png" alt="Talkora Logo" className="logo-image" style={{ height: '28px' }} />
           <span style={{ fontWeight: 800, fontSize: '1.5rem', color: 'var(--color-text-main)' }}>Talkora</span>
         </div>
         <p style={{ color: 'var(--color-text-muted)' }}>© 2026 Talkora AI Agents. Todos los derechos reservados.</p>
