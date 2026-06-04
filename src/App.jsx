@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Phone, MessageCircle, Mic, PhoneOff, ArrowRight, CheckCircle2, Loader2 } from 'lucide-react';
+import { Phone, MessageCircle, Mic, PhoneOff, ArrowRight, CheckCircle2, Loader2, Instagram } from 'lucide-react';
 import { RetellWebClient } from 'retell-client-js-sdk';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import './App.css';
@@ -15,6 +15,7 @@ function App() {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 1000], [0, 200]);
   const y2 = useTransform(scrollY, [0, 1000], [0, -150]);
+  const y3 = useTransform(scrollY, [0, 1000], [0, 100]);
 
   useEffect(() => {
     retellWebClientRef.current = new RetellWebClient();
@@ -119,7 +120,7 @@ function App() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <img src="/logo-talkora.png" alt="Talkora Logo" style={{ height: '36px', objectFit: 'contain' }} />
+          <img src="/logo-talkora.png" alt="Talkora Logo" className="logo-image" />
           <span>Talkora</span>
         </motion.div>
         <motion.button 
@@ -140,6 +141,7 @@ function App() {
       <section className="hero">
         <motion.div className="glass-shape shape-1" style={{ y: y1 }} />
         <motion.div className="glass-shape shape-2" style={{ y: y2 }} />
+        <motion.div className="glass-shape shape-3" style={{ y: y3 }} />
         
         <motion.div
           initial="hidden"
@@ -175,6 +177,41 @@ function App() {
             </motion.button>
           </motion.div>
         </motion.div>
+      </section>
+
+      {/* About Section */}
+      <section className="about-section">
+        <div className="about-container">
+          <motion.div 
+            className="about-image-wrapper"
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+          >
+            <img src="/foto-bea.png" alt="Beatriz - Fundadora de Talkora" className="about-image" />
+            <div className="about-image-glow"></div>
+          </motion.div>
+          
+          <motion.div 
+            className="about-content"
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <h2 className="about-title">Conoce a la mente detrás de <span className="text-primary-gradient">Talkora</span></h2>
+            <p className="about-desc">
+              Soy <strong>Beatriz</strong>, experta en automatización con Inteligencia Artificial. Mi misión es ayudar a propietarios de apartamentos turísticos a recuperar su tiempo libre.
+            </p>
+            <p className="about-desc">
+              Con Talkora, he diseñado agentes capaces de gestionar el 90% de la comunicación con tus huéspedes de forma natural, humana y eficiente. Deja de trabajar para tu negocio y haz que la IA trabaje para ti.
+            </p>
+            <a href="https://www.instagram.com/beatrizautomatiza/" target="_blank" rel="noopener noreferrer" className="btn-instagram">
+              <Instagram size={20} /> Sígueme en Instagram
+            </a>
+          </motion.div>
+        </div>
       </section>
 
       {/* Services Section */}
@@ -300,7 +337,7 @@ function App() {
       {/* Footer */}
       <footer className="footer">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-          <img src="/logo-talkora.png" alt="Talkora Logo" style={{ height: '32px', objectFit: 'contain' }} />
+          <img src="/logo-talkora.png" alt="Talkora Logo" className="logo-image" style={{ height: '28px' }} />
           <span style={{ fontWeight: 800, fontSize: '1.5rem', color: 'var(--color-text-main)' }}>Talkora</span>
         </div>
         <p style={{ color: 'var(--color-text-muted)' }}>© 2026 Talkora AI Agents. Todos los derechos reservados.</p>
