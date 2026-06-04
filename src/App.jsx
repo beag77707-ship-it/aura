@@ -170,7 +170,7 @@ function App() {
         </motion.div>
         <motion.button 
           className="btn-primary" 
-          onClick={() => document.getElementById('agendar').scrollIntoView({ behavior: 'smooth' })}
+          onClick={() => window.open("https://calendar.google.com/calendar/u/0?cid=MmNhYzMzYmI0MDgwZDI4YzY2NzdkNzE5NWVlMmE2MGFhZmY5MDIxZjAyYzJmZGUwODEwZjhhOTIwNzIxZGJlZUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t", "_blank")}
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
@@ -178,7 +178,7 @@ function App() {
           whileTap={{ scale: 0.95 }}
         >
           <Calendar size={18} />
-          Contactar
+          Agendar Llamada
         </motion.button>
       </nav>
 
