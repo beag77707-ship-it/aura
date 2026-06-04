@@ -90,7 +90,7 @@ function App() {
       {/* Navbar */}
       <nav className="navbar">
         <div className="nav-logo">
-          <Bot className="logo-icon" size={32} />
+          <img src="/logo-talkora.png" alt="Talkora Logo" style={{ height: '36px', objectFit: 'contain' }} />
           <span>Aura</span>
         </div>
         <button className="btn-primary" onClick={handleWhatsAppRedirect}>
@@ -216,7 +216,7 @@ function App() {
       {/* Footer */}
       <footer className="footer">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-          <Bot size={24} color="var(--color-primary)" />
+          <img src="/logo-talkora.png" alt="Talkora Logo" style={{ height: '28px', objectFit: 'contain' }} />
           <span style={{ fontWeight: 700, fontSize: '1.25rem', color: 'var(--color-text-main)' }}>Aura</span>
         </div>
         <p>© 2026 Aura AI Agents. Todos los derechos reservados.</p>
