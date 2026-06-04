@@ -60,6 +60,11 @@ function App() {
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
+  const scrollToDemo = (tab) => {
+    if (tab) setActiveTab(tab);
+    document.getElementById('demo').scrollIntoView({ behavior: 'smooth' });
+  };
+
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (!chatInput.trim()) return;
@@ -165,14 +170,14 @@ function App() {
         </motion.div>
         <motion.button 
           className="btn-primary" 
-          onClick={handleWhatsAppRedirect}
+          onClick={() => document.getElementById('agendar').scrollIntoView({ behavior: 'smooth' })}
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <MessageCircle size={18} />
+          <Calendar size={18} />
           Contactar
         </motion.button>
       </nav>
@@ -199,7 +204,7 @@ function App() {
           <motion.div variants={fadeInOut} className="hero-actions">
             <motion.button 
               className="btn-primary" 
-              onClick={() => document.getElementById('demo').scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => scrollToDemo('voice')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -207,7 +212,7 @@ function App() {
             </motion.button>
             <motion.button 
               className="btn-secondary" 
-              onClick={handleWhatsAppRedirect}
+              onClick={() => scrollToDemo('whatsapp')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -301,7 +306,7 @@ function App() {
           </div>
 
           {/* Calendar Button */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '3rem' }}>
+          <div id="agendar" style={{ display: 'flex', justifyContent: 'center', marginTop: '3rem' }}>
             <motion.a 
               href="https://calendar.google.com/calendar/u/0?cid=MmNhYzMzYmI0MDgwZDI4YzY2NzdkNzE5NWVlMmE2MGFhZmY5MDIxZjAyYzJmZGUwODEwZjhhOTIwNzIxZGJlZUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t"
               target="_blank"
