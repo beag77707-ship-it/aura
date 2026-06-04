@@ -41,7 +41,7 @@ function App() {
 
   const handleWhatsAppRedirect = () => {
     const phoneNumber = "34600000000"; 
-    const message = "Hola Aura, me gustaría obtener más información.";
+    const message = "Hola Talkora, me gustaría obtener más información.";
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
@@ -91,7 +91,7 @@ function App() {
       <nav className="navbar">
         <div className="nav-logo">
           <img src="/logo-talkora.png" alt="Talkora Logo" style={{ height: '36px', objectFit: 'contain' }} />
-          <span>Aura</span>
+          <span>Talkora</span>
         </div>
         <button className="btn-primary" onClick={handleWhatsAppRedirect}>
           <MessageCircle size={20} />
@@ -103,7 +103,7 @@ function App() {
       <section className="hero animate-fade-in">
         <div className="hero-badge">IA para Apartamentos Turísticos</div>
         <h1 className="hero-title">
-          Revoluciona tu Atención con <span className="text-primary-gradient">Aura</span>
+          Revoluciona tu Atención con <span className="text-primary-gradient">Talkora</span>
         </h1>
         <p className="hero-subtitle">
           Agentes de Voz y WhatsApp disponibles 24/7. Gestiona reservas, responde dudas de huéspedes al instante y ahorra tiempo. Cero esperas, cero estrés.
@@ -122,7 +122,7 @@ function App() {
       <section className="services">
         <div className="section-header">
           <h2 className="section-title">Automatización Completa</h2>
-          <p className="text-muted">Descubre cómo Aura transforma la gestión de tus huéspedes.</p>
+          <p className="text-muted">Descubre cómo Talkora transforma la gestión de tus huéspedes.</p>
         </div>
         
         <div className="services-grid">
@@ -169,14 +169,14 @@ function App() {
       {/* Demo Section */}
       <section id="demo" className="demo-section">
         <div className="section-header">
-          <h2 className="section-title">Habla con Aura</h2>
+          <h2 className="section-title">Habla con Talkora</h2>
           <p className="text-muted">Prueba nuestro agente de voz en tiempo real.</p>
         </div>
         
         <div className="demo-container">
           <div className="demo-status">
             <div className={`status-dot ${isCalling ? 'pulse' : ''}`} style={{ backgroundColor: isCalling ? '#EF4444' : '#10B981' }}></div>
-            {isCalling ? 'Conectado a Aura' : 'Sistemas Operativos. IA Lista.'}
+            {isCalling ? 'Conectado a Talkora' : 'Sistemas Operativos. IA Lista.'}
           </div>
           
           <button 
@@ -189,7 +189,7 @@ function App() {
           </button>
           
           <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>
-            {isLoading ? 'Conectando con servidor...' : (isCalling ? 'Aura te está escuchando...' : 'Pulsa para hablar')}
+            {isLoading ? 'Conectando con servidor...' : (isCalling ? 'Talkora te está escuchando...' : 'Pulsa para hablar')}
           </h3>
           <p style={{ color: 'var(--color-text-muted)' }}>
             Agent ID: {agentId}
@@ -206,7 +206,7 @@ function App() {
       <section className="cta-section">
         <h2 className="cta-title">¿Listo para modernizar tu negocio?</h2>
         <p className="cta-desc">
-          Integra a Aura en tus apartamentos y empieza a ahorrar tiempo desde el primer día.
+          Integra a Talkora en tus apartamentos y empieza a ahorrar tiempo desde el primer día.
         </p>
         <button className="btn-primary" onClick={handleWhatsAppRedirect} style={{ backgroundColor: 'white', color: 'var(--color-text-main)' }}>
           Hablar por WhatsApp <ArrowRight size={20} />
@@ -217,9 +217,9 @@ function App() {
       <footer className="footer">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
           <img src="/logo-talkora.png" alt="Talkora Logo" style={{ height: '28px', objectFit: 'contain' }} />
-          <span style={{ fontWeight: 700, fontSize: '1.25rem', color: 'var(--color-text-main)' }}>Aura</span>
+          <span style={{ fontWeight: 700, fontSize: '1.25rem', color: 'var(--color-text-main)' }}>Talkora</span>
         </div>
-        <p>© 2026 Aura AI Agents. Todos los derechos reservados.</p>
+        <p>© 2026 Talkora AI Agents. Todos los derechos reservados.</p>
         <p style={{ marginTop: '0.5rem', fontSize: '0.875rem' }}>Desarrollado para WebBeatrizAutomatiza</p>
       </footer>
     </div>
