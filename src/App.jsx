@@ -1,22 +1,81 @@
-import React, { useState } from 'react';
-import { Bot, Phone, MessageCircle, Mic, PhoneOff, ArrowRight, CheckCircle2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Bot, Phone, MessageCircle, Mic, PhoneOff, ArrowRight, CheckCircle2, Loader2 } from 'lucide-react';
+import { RetellWebClient } from 'retell-client-js-sdk';
 import './App.css';
+
+const agentId = "agent_f3cd88bfcb9943d32ce5a09771";
 
 function App() {
   const [isCalling, setIsCalling] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorText, setErrorText] = useState("");
+  const retellWebClientRef = useRef(null);
 
-  // Placeholder for WhatsApp redirect
+  useEffect(() => {
+    retellWebClientRef.current = new RetellWebClient();
+    const retellClient = retellWebClientRef.current;
+
+    retellClient.on("call_started", () => {
+      setIsCalling(true);
+      setIsLoading(false);
+      setErrorText("");
+    });
+
+    retellClient.on("call_ended", () => {
+      setIsCalling(false);
+      setIsLoading(false);
+    });
+
+    retellClient.on("error", (error) => {
+      console.error("Retell SDK Error:", error);
+      setIsCalling(false);
+      setIsLoading(false);
+      setErrorText("Asegúrate de haber añadido tu API Key secreta.");
+      retellClient.stopCall();
+    });
+
+    return () => {
+      retellClient.stopCall();
+    };
+  }, []);
+
   const handleWhatsAppRedirect = () => {
-    // Reemplaza esto con el número real cuando el usuario lo proporcione
     const phoneNumber = "34600000000"; 
     const message = "Hola Aura, me gustaría obtener más información.";
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
-  // Placeholder for Retell AI logic
-  const toggleCall = () => {
-    // Aquí irá la lógica del SDK de Retell AI usando el Agent ID
-    setIsCalling(!isCalling);
+  const toggleCall = async () => {
+    if (isCalling || isLoading) {
+      retellWebClientRef.current?.stopCall();
+      return;
+    }
+
+    setIsLoading(true);
+    setErrorText("");
+
+    try {
+      const response = await fetch('/api/create-web-call', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ agent_id: agentId })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Error creando llamada");
+      }
+
+      await retellWebClientRef.current?.startCall({
+        accessToken: data.access_token,
+      });
+
+    } catch (err) {
+      console.error("Error al iniciar llamada:", err);
+      setErrorText("Falta la API Key en el servidor o hay un error.");
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -116,24 +175,30 @@ function App() {
         
         <div className="demo-container">
           <div className="demo-status">
-            <div className="status-dot"></div>
-            Sistemas Operativos. IA Lista.
+            <div className={`status-dot ${isCalling ? 'pulse' : ''}`} style={{ backgroundColor: isCalling ? '#EF4444' : '#10B981' }}></div>
+            {isCalling ? 'Conectado a Aura' : 'Sistemas Operativos. IA Lista.'}
           </div>
           
           <button 
             className={`mic-button ${isCalling ? 'active' : ''}`}
             onClick={toggleCall}
+            disabled={isLoading}
             aria-label={isCalling ? 'Finalizar llamada' : 'Iniciar llamada'}
           >
-            {isCalling ? <PhoneOff size={40} /> : <Mic size={40} />}
+            {isLoading ? <Loader2 className="animate-spin" size={40} /> : (isCalling ? <PhoneOff size={40} /> : <Mic size={40} />)}
           </button>
           
           <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>
-            {isCalling ? 'Aura te está escuchando...' : 'Pulsa para hablar'}
+            {isLoading ? 'Conectando con servidor...' : (isCalling ? 'Aura te está escuchando...' : 'Pulsa para hablar')}
           </h3>
           <p style={{ color: 'var(--color-text-muted)' }}>
-            Agent ID conectado: agent_f3cd88bfcb9943d32ce5a09771
+            Agent ID: {agentId}
           </p>
+          {errorText && (
+            <p style={{ color: '#EF4444', marginTop: '1rem', fontWeight: 500 }}>
+              {errorText}
+            </p>
+          )}
         </div>
       </section>
 
