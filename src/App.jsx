@@ -148,9 +148,6 @@ function App() {
 
       {/* Hero Section */}
       <section className="hero">
-        <motion.div className="glass-shape shape-1" style={{ y: y1 }} />
-        <motion.div className="glass-shape shape-2" style={{ y: y2 }} />
-        <motion.div className="glass-shape shape-3" style={{ y: y3 }} />
         
         <motion.div
           className="hero-content"
