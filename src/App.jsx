@@ -10,7 +10,7 @@ function App() {
   const [isCalling, setIsCalling] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
-  const [activeTab, setActiveTab] = useState('whatsapp');
+  const [activeTab, setActiveTab] = useState('voice');
   const retellWebClientRef = useRef(null);
 
   const { scrollY } = useScroll();
@@ -167,48 +167,68 @@ function App() {
           </motion.div>
         </motion.div>
 
-        {/* Dashboard Showcase Mockup */}
+        {/* Playground Console */}
         <motion.div 
-          className="dashboard-showcase"
+          className="playground-console"
           initial={{ opacity: 0, y: 80 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
+          id="demo"
         >
-          <div className="dashboard-header">
-            <div className="window-dots">
-              <span className="dot red"></span><span className="dot yellow"></span><span className="dot green"></span>
-            </div>
-            <div className="dashboard-tabs">
-              <button className={`dash-tab ${activeTab === 'whatsapp' ? 'active' : ''}`} onClick={() => setActiveTab('whatsapp')}>WhatsApp</button>
-              <button className={`dash-tab ${activeTab === 'voice' ? 'active' : ''}`} onClick={() => setActiveTab('voice')}>Voz</button>
-            </div>
+          <div className="pg-tabs-container">
+            <button className={`pg-tab ${activeTab === 'voice' ? 'active' : ''}`} onClick={() => setActiveTab('voice')}>
+              <Phone size={18} /> Llamada de Voz
+            </button>
+            <button className={`pg-tab ${activeTab === 'whatsapp' ? 'active' : ''}`} onClick={() => setActiveTab('whatsapp')}>
+              <MessageCircle size={18} /> WhatsApp
+            </button>
           </div>
           
-          <div className="dashboard-content">
-            {activeTab === 'voice' ? (
-              <div className="voice-sim">
-                <div className="voice-avatar"><Mic size={32}/></div>
-                <h4>Agente IA Activo</h4>
-                <p>Escuchando y procesando...</p>
-                <div className="waveform-sim">
-                  {[...Array(15)].map((_, i) => <div key={i} className="wave-bar"></div>)}
+          <div className="pg-card">
+            <div className="pg-card-inner">
+              {activeTab === 'voice' ? (
+                <div className="pg-voice-mode">
+                  <div className="pg-avatar"><Mic size={40}/></div>
+                  <h3 className="pg-status-title">Agente IA Activo</h3>
+                  <p className="pg-status-subtitle">
+                    {isCalling ? "Conectado · Tiempo real" : "Pulsa para iniciar"}
+                  </p>
+                  
+                  <div className={`pg-waveform ${isCalling ? 'active' : ''}`}>
+                    {[...Array(40)].map((_, i) => <div key={i} className="pg-bar"></div>)}
+                  </div>
+                  
+                  <div className="pg-transcript">
+                    <span className="text-primary-gradient" style={{fontWeight: 700}}>IA:</span> "¡Hola! Soy Talkora. He comprobado tu reserva para el apartamento y todo está listo."
+                  </div>
+                  
+                  <div className="pg-controls">
+                    <button 
+                      className={`pg-call-btn ${isCalling ? 'hangup' : ''}`}
+                      onClick={toggleCall}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? <Loader2 className="animate-spin" size={24} /> : (isCalling ? <PhoneOff size={24} /> : <Phone size={24} />)}
+                    </button>
+                    {errorText && <p style={{color: '#EF4444', fontSize: '0.9rem', marginTop: '1rem'}}>{errorText}</p>}
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="whatsapp-sim">
-                <div className="chat-bubble user">
-                  Hola, quería reservar un apartamento del miércoles 4 de julio al domingo 7 de julio, por favor.
+              ) : (
+                <div className="pg-whatsapp-mode">
+                  <div className="pg-chat-container">
+                    <div className="pg-chat-user">
+                      Necesito reservar un apartamento del miércoles 4 de julio al domingo 7 de julio.
+                    </div>
+                    <div className="pg-chat-bot">
+                      ¡Hola! Por supuesto. He comprobado nuestra disponibilidad y tenemos un apartamento premium libre para esas fechas. El total es de 350€. ¿Cuándo prefieres realizar el pago?
+                    </div>
+                  </div>
+                  <button className="pg-wa-btn" onClick={handleWhatsAppRedirect}>
+                    <MessageCircle size={20} /> Probar en WhatsApp Real
+                  </button>
                 </div>
-                <div className="chat-bubble bot">
-                  ¡Hola! Por supuesto. He comprobado nuestra disponibilidad y tenemos un apartamento premium libre para esas fechas. El total de la estancia sería de 350€. ¿Te envío el enlace para confirmar la reserva de forma segura?
-                </div>
-              </div>
-            )}
-          </div>
-          
-          <div className="dashboard-footer">
-            <span>Estadísticas de Hoy</span>
-            <span className="stats-green">+34% ↑ 1,284 reservas automatizadas</span>
+              )}
+            </div>
           </div>
         </motion.div>
       </section>
@@ -327,55 +347,7 @@ function App() {
         </div>
       </section>
 
-      {/* Demo Section */}
-      <section id="demo" className="demo-section">
-        <motion.div 
-          className="section-header"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={fadeInOut}
-        >
-          <h2 className="section-title text-gradient">Habla con Talkora</h2>
-          <p className="text-muted" style={{ fontSize: '1.2rem' }}>Experimenta el futuro de la atención al huésped.</p>
-        </motion.div>
-        
-        <motion.div 
-          className="demo-container"
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, ease: "easeOut" }}
-        >
-          <div className="demo-status">
-            <div className={`status-dot ${isCalling ? 'pulse' : ''}`} style={{ backgroundColor: isCalling ? '#EF4444' : '#10B981' }}></div>
-            {isCalling ? 'Conectado a Talkora' : 'Sistemas Operativos. IA Lista.'}
-          </div>
-          
-          <button 
-            className={`mic-button ${isCalling ? 'active' : ''}`}
-            onClick={toggleCall}
-            disabled={isLoading}
-            aria-label={isCalling ? 'Finalizar llamada' : 'Iniciar llamada'}
-          >
-            {isLoading ? <Loader2 className="animate-spin" size={48} /> : (isCalling ? <PhoneOff size={48} /> : <Mic size={48} />)}
-          </button>
-          
-          <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem', fontWeight: 700 }}>
-            {isLoading ? 'Conectando...' : (isCalling ? 'Talkora te está escuchando...' : 'Pulsa para hablar')}
-          </h3>
-          
-          {errorText && (
-            <motion.p 
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              style={{ color: '#EF4444', marginTop: '1rem', fontWeight: 500, fontSize: '1.1rem' }}
-            >
-              {errorText}
-            </motion.p>
-          )}
-        </motion.div>
-      </section>
+
 
       {/* Footer */}
       <footer className="footer">
