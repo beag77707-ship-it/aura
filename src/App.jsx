@@ -55,7 +55,7 @@ function App() {
   }, []);
 
   const handleWhatsAppRedirect = () => {
-    const phoneNumber = "34600000000"; 
+    const phoneNumber = "34658262837"; 
     const message = "Hola Talkora, me gustaría obtener más información.";
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
   };
