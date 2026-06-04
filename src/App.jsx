@@ -50,6 +50,12 @@ function App() {
     };
   }, []);
 
+  const handleWhatsAppRedirect = () => {
+    const phoneNumber = "34600000000"; 
+    const message = "Hola Talkora, me gustaría obtener más información.";
+    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (!chatInput.trim()) return;
