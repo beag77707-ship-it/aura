@@ -61,15 +61,23 @@ function App() {
     if (!chatInput.trim()) return;
     
     const userMsg = { sender: 'user', text: chatInput };
+    const currentMessagesCount = chatMessages.length;
     setChatMessages((prev) => [...prev, userMsg]);
     setChatInput('');
 
-    // Simulate bot typing and responding
+    // Simulate bot typing and responding based on conversation length
     setTimeout(() => {
-      setChatMessages((prev) => [
-        ...prev,
-        { sender: 'bot', text: 'Esta es una respuesta simulada de Talkora. En la versión final, aquí se integrará la API de WhatsApp real.' }
-      ]);
+      setChatMessages((prev) => {
+        let botText = "";
+        if (currentMessagesCount === 1) {
+          botText = "¡Perfecto! Me encargo de gestionarlo. ¿Para qué fechas te interesaría reservar y cuántas personas seríais en total?";
+        } else if (currentMessagesCount === 3) {
+          botText = "¡Genial! He revisado nuestra disponibilidad y tenemos un espectacular apartamento céntrico libre para esas fechas. El total sería de 350€. ¿Te envío el enlace de pago seguro para que confirmes tu reserva?";
+        } else {
+          botText = "¡Recibido! En esta versión de prueba, la simulación llega hasta aquí. Cuando conectes la API de WhatsApp, la IA manejará toda la conversación real con tus huéspedes. 🚀";
+        }
+        return [...prev, { sender: 'bot', text: botText }];
+      });
     }, 1500);
   };
 
