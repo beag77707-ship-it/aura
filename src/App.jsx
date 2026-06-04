@@ -70,11 +70,15 @@ function App() {
       setChatMessages((prev) => {
         let botText = "";
         if (currentMessagesCount === 1) {
-          botText = "¡Perfecto! Me encargo de gestionarlo. ¿Para qué fechas te interesaría reservar y cuántas personas seríais en total?";
+          botText = "¡Perfecto! ¿Para qué fechas te interesaría realizar la reserva?";
         } else if (currentMessagesCount === 3) {
-          botText = "¡Genial! He revisado nuestra disponibilidad y tenemos un espectacular apartamento céntrico libre para esas fechas. El total sería de 350€. ¿Te envío el enlace de pago seguro para que confirmes tu reserva?";
+          botText = "¡Genial! He comprobado la disponibilidad y tenemos esos días libres. ¿Para cuántas personas sería la reserva?";
+        } else if (currentMessagesCount === 5) {
+          botText = "Anotado. ¿Tienes alguna petición especial, como necesitar llegar antes o después de la hora habitual de check-in?";
+        } else if (currentMessagesCount === 7) {
+          botText = "¡Perfecto! Tu reserva está hecha. Te acaba de llegar un correo con toda la información de tu estancia y un número de contacto directo para el día de tu llegada, por si te surge algún problema. ¡Te esperamos!";
         } else {
-          botText = "¡Recibido! En esta versión de prueba, la simulación llega hasta aquí. Cuando conectes la API de WhatsApp, la IA manejará toda la conversación real con tus huéspedes. 🚀";
+          botText = "¡Gracias! Esta es una demo simulada de Talkora. Para empezar de nuevo, puedes recargar la página.";
         }
         return [...prev, { sender: 'bot', text: botText }];
       });
