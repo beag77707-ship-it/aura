@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Phone, MessageCircle, Mic, PhoneOff, ArrowRight, CheckCircle2, Loader2, Instagram } from 'lucide-react';
+import { Phone, MessageCircle, Mic, PhoneOff, ArrowRight, CheckCircle2, Loader2, Instagram, Calendar, Globe, Zap, Clock } from 'lucide-react';
 import { RetellWebClient } from 'retell-client-js-sdk';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import './App.css';
@@ -10,6 +10,7 @@ function App() {
   const [isCalling, setIsCalling] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
+  const [activeTab, setActiveTab] = useState('whatsapp');
   const retellWebClientRef = useRef(null);
 
   const { scrollY } = useScroll();
@@ -40,21 +41,8 @@ function App() {
       retellClient.stopCall();
     });
 
-    // Efecto magnético brillante para las tarjetas
-    const handleMouseMove = (e) => {
-      for (const card of document.querySelectorAll('.service-card')) {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
-      }
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-
     return () => {
       retellClient.stopCall();
-      window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
 
@@ -144,6 +132,7 @@ function App() {
         <motion.div className="glass-shape shape-3" style={{ y: y3 }} />
         
         <motion.div
+          className="hero-content"
           initial="hidden"
           animate="visible"
           variants={{
@@ -177,6 +166,130 @@ function App() {
             </motion.button>
           </motion.div>
         </motion.div>
+
+        {/* Dashboard Showcase Mockup */}
+        <motion.div 
+          className="dashboard-showcase"
+          initial={{ opacity: 0, y: 80 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
+        >
+          <div className="dashboard-header">
+            <div className="window-dots">
+              <span className="dot red"></span><span className="dot yellow"></span><span className="dot green"></span>
+            </div>
+            <div className="dashboard-tabs">
+              <button className={`dash-tab ${activeTab === 'whatsapp' ? 'active' : ''}`} onClick={() => setActiveTab('whatsapp')}>WhatsApp</button>
+              <button className={`dash-tab ${activeTab === 'voice' ? 'active' : ''}`} onClick={() => setActiveTab('voice')}>Voz</button>
+            </div>
+          </div>
+          
+          <div className="dashboard-content">
+            {activeTab === 'voice' ? (
+              <div className="voice-sim">
+                <div className="voice-avatar"><Mic size={32}/></div>
+                <h4>Agente IA Activo</h4>
+                <p>Escuchando y procesando...</p>
+                <div className="waveform-sim">
+                  {[...Array(15)].map((_, i) => <div key={i} className="wave-bar"></div>)}
+                </div>
+              </div>
+            ) : (
+              <div className="whatsapp-sim">
+                <div className="chat-bubble user">
+                  Hola, quería reservar un apartamento del miércoles 4 de julio al domingo 7 de julio, por favor.
+                </div>
+                <div className="chat-bubble bot">
+                  ¡Hola! Por supuesto. He comprobado nuestra disponibilidad y tenemos un apartamento premium libre para esas fechas. El total de la estancia sería de 350€. ¿Te envío el enlace para confirmar la reserva de forma segura?
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <div className="dashboard-footer">
+            <span>Estadísticas de Hoy</span>
+            <span className="stats-green">+34% ↑ 1,284 reservas automatizadas</span>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Bilingual Orbit Section */}
+      <section className="orbit-section">
+        <motion.div 
+          className="orbit-container"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInOut}
+        >
+          <div className="orbit-content">
+            <h2 className="section-title">Un Agente IA. <br/><span className="text-primary-gradient">Bilingüe Nativo.</span><br/>Cualquier Cliente.</h2>
+            <p className="about-desc" style={{ marginTop: '1.5rem' }}>
+              Nuestros agentes detectan automáticamente si tu cliente habla <strong>Español</strong> o <strong>Inglés</strong> y adaptan la conversación en tiempo real. Sin configuraciones previas, solo despliega la IA y domina el mercado internacional sin esfuerzo.
+            </p>
+          </div>
+          <div className="orbit-visual">
+            <div className="orbit-center"></div>
+            <div className="orbit-ring ring-1">
+              <div className="orbit-node node-en">EN</div>
+            </div>
+            <div className="orbit-ring ring-2">
+              <div className="orbit-node node-es">ES</div>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Bento Grid Services Section */}
+      <section className="services">
+        <motion.div 
+          className="section-header"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInOut}
+        >
+          <h2 className="section-title">Automatización Inteligente</h2>
+          <p className="text-muted" style={{ fontSize: '1.2rem' }}>Todo lo que necesitas para escalar la gestión de tus apartamentos.</p>
+        </motion.div>
+        
+        <div className="bento-grid">
+          <motion.div className="bento-card" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+            <div className="bento-icon"><Phone size={24} /></div>
+            <h3>Gestionar Llamadas</h3>
+            <p>Llamadas entrantes y salientes gestionadas por una IA con voz natural, capaz de hacer check-in y emergencias.</p>
+          </motion.div>
+          
+          <motion.div className="bento-card" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}>
+            <div className="bento-icon"><MessageCircle size={24} /></div>
+            <h3>Conversaciones WhatsApp</h3>
+            <p>Automatiza la mensajería con respuestas contextuales. Envía links de pago, normas y recomendaciones locales.</p>
+          </motion.div>
+          
+          <motion.div className="bento-card" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}>
+            <div className="bento-icon"><Calendar size={24} /></div>
+            <h3>Agendar Reservas</h3>
+            <p>La IA consulta la disponibilidad en tiempo real y gestiona cancelaciones o reprogramaciones al instante.</p>
+          </motion.div>
+          
+          <motion.div className="bento-card" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }}>
+            <div className="bento-icon"><Globe size={24} /></div>
+            <h3>Soporte Bilingüe</h3>
+            <p>Comunicación impecable tanto en Español como en Inglés, adaptándose a las necesidades de cada huésped.</p>
+          </motion.div>
+          
+          <motion.div className="bento-card" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.5 }}>
+            <div className="bento-icon"><Zap size={24} /></div>
+            <h3>Enrutamiento Inteligente</h3>
+            <p>Deriva automáticamente las incidencias graves o muy complejas a tu equipo humano para su revisión.</p>
+          </motion.div>
+          
+          <motion.div className="bento-card" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.6 }}>
+            <div className="bento-icon"><Clock size={24} /></div>
+            <h3>Operación 24/7</h3>
+            <p>Tus agentes de IA nunca duermen. Asegura un nivel de respuesta premium a las 3 de la madrugada.</p>
+          </motion.div>
+        </div>
       </section>
 
       {/* About Section */}
@@ -210,76 +323,6 @@ function App() {
             <a href="https://www.instagram.com/beatrizautomatiza/" target="_blank" rel="noopener noreferrer" className="btn-instagram">
               <Instagram size={20} /> Sígueme en Instagram
             </a>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section className="services">
-        <motion.div 
-          className="section-header"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={fadeInOut}
-        >
-          <h2 className="section-title text-gradient">Automatización Inteligente</h2>
-          <p className="text-muted" style={{ fontSize: '1.2rem' }}>Descubre cómo Talkora transforma la experiencia de tus huéspedes.</p>
-        </motion.div>
-        
-        <div className="services-grid">
-          {/* Voice Agent Card */}
-          <motion.div 
-            className="service-card"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-          >
-            <div className="service-content">
-              <div className="service-icon-wrapper">
-                <Phone size={32} />
-              </div>
-              <h3 className="service-title">Recepcionista Virtual 24/7</h3>
-              <p className="service-desc">
-                Un agente telefónico capaz de realizar el check-in, explicar las normas del apartamento y resolver cualquier emergencia en tiempo real, con voz natural y en múltiples idiomas.
-              </p>
-              <ul style={{ marginTop: '1.5rem', listStyle: 'none', padding: 0 }}>
-                {['Atención multi-idioma nativa', 'Check-in y Check-out automático', 'Resolución de incidencias 24h'].map((item, i) => (
-                  <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem', color: 'var(--color-text-main)' }}>
-                    <CheckCircle2 size={18} style={{ color: 'var(--color-primary)' }} />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-
-          {/* WhatsApp Agent Card */}
-          <motion.div 
-            className="service-card"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
-            <div className="service-content">
-              <div className="service-icon-wrapper">
-                <MessageCircle size={32} />
-              </div>
-              <h3 className="service-title">WhatsApp en Piloto Automático</h3>
-              <p className="service-desc">
-                Convierte conversaciones en reservas. Nuestro agente inteligente gestiona solicitudes, envía enlaces de pago y responde preguntas frecuentes directamente en la app que tus clientes ya usan.
-              </p>
-              <ul style={{ marginTop: '1.5rem', listStyle: 'none', padding: 0 }}>
-                {['Respuestas instantáneas', 'Gestión integral de reservas', 'Soporte activo durante la estancia'].map((item, i) => (
-                  <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem', color: 'var(--color-text-main)' }}>
-                    <CheckCircle2 size={18} style={{ color: 'var(--color-primary)' }} />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
           </motion.div>
         </div>
       </section>
